@@ -1,0 +1,25 @@
+# Activate with: --spring.profiles.active=postgres
+# Expects a Postgres reachable at the URL below (see docker-compose.yml).
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/orders}
+    username: ${POSTGRES_USER:orders}
+    password: ${POSTGRES_PASSWORD:orders}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate        # schema managed by Flyway/Liquibase in production
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Point to an external Artemis broker instead of the embedded one.
+  artemis:
+    mode: native
+    broker-url: ${ARTEMIS_URL:tcp://localhost:61616}
+    user: ${ARTEMIS_USER:artemis}
+    password: ${ARTEMIS_PASSWORD:artemis}
+    embedded:
+      enabled: false
+
